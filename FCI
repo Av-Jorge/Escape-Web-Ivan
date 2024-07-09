@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room de Iván</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div id="welcome" class="section active">
+            <h1>¡Feliz Cumpleaños, Iván!</h1>
+            <p>Prepárate para una aventura especial. Usa tu ingenio para descubrir tu regalo. ¡Buena suerte!</p>
+            <button onclick="nextSection('section1')">Comenzar</button>
+        </div>
+        
+        <div id="section1" class="section">
+            <h2>El Aula Secreta</h2>
+            <p>Iván, entras a una clase y ves una pizarra con una ecuación escrita en clave. Descifra el mensaje para avanzar.</p>
+            <p>3 + 5 = R, 4 + 6 = E, 2 + 8 = D, 7 + 3 = E, 9 - 3 = S</p>
+            <input type="text" id="answer1" placeholder="Tu respuesta">
+            <button onclick="checkAnswer('answer1', 'REDES', 'section2')">Enviar</button>
+            <div id="feedback1" class="feedback"></div>
+        </div>
+
+        <div id="section2" class="section">
+            <h2>El Laberinto del Conocimiento</h2>
+            <p>Responde correctamente para obtener la siguiente pista.</p>
+            <ul>
+                <li>¿Quién escribió "El Principito"? <input type="text" id="q1"></li>
+                <li>¿En qué libro aparece Harry Potter? <input type="text" id="q2"></li>
+                <li>¿Cuál es el nombre del detective creado por Arthur Conan Doyle? <input type="text" id="q3"></li>
+            </ul>
+            <button onclick="checkQuiz(['q1', 'q2', 'q3'], ['Antoine de Saint-Exupéry', 'Harry Potter y la Piedra Filosofal', 'Sherlock Holmes'], 'section3')">Enviar</button>
+            <div id="feedback2" class="feedback"></div>
+        </div>
+
+        <div id="section3" class="section">
+            <h2>El Código del Profesor</h2>
+            <p>Encuentras un cuaderno con un código cifrado: '13-15-18-5-14-15'. Desencripta el código para avanzar.</p>
+            <input type="text" id="answer3" placeholder="Tu respuesta">
+            <button onclick="checkAnswer('answer3', 'MORENO', 'section4')">Enviar</button>
+            <div id="feedback3" class="feedback"></div>
+        </div>
+
+        <div id="section4" class="section">
+            <h2>La Clase del Futuro</h2>
+            <p>¿Qué elementos usas en un aula digital? Encuentra tres palabras.</p>
+            <input type="text" id="answer4" placeholder="Tu respuesta">
+            <button onclick="checkAnswer('answer4', 'Pizarra digital, Tablet, Proyector', 'section5')">Enviar</button>
+            <div id="feedback4" class="feedback"></div>
+        </div>
+
+        <div id="section5" class="section">
+            <h2>El Diario del Estudiante</h2>
+            <p>Encuentras el diario de un estudiante con una entrada que describe su libro favorito: 'Es un libro que me hizo invisible y me conectó con otros.' ¿Cuál es el título?</p>
+            <input type="text" id="answer5" placeholder="Tu respuesta">
+            <button onclick="checkAnswer('answer5', 'INVISIBLE', 'finalSection')">Enviar</button>
+            <div id="feedback5" class="feedback"></div>
+        </div>
+
+        <div id="finalSection" class="section">
+            <h2>La Conexión Final</h2>
+            <p>Desencripta el mensaje final: 'En la red de historias, donde todos somos uno, tu regalo es un libro que continúa lo invisible.'</p>
+            <input type="text" id="finalAnswer" placeholder="Tu respuesta">
+            <button onclick="checkAnswer('finalAnswer', 'REDES (INVISIBLE 2)', 'congratulations')">Enviar</button>
+            <div id="finalFeedback" class="feedback"></div>
+        </div>
+
+        <div id="congratulations" class="section">
+            <h1>¡Felicidades, Iván!</h1>
+            <p>Has descubierto tu regalo: el libro <strong>REDES (INVISIBLE 2)</strong> de Eloy Moreno. ¡Disfrútalo!</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+function nextSection(sectionId) {
+    document.querySelector('.section.active').classList.remove('active');
+    document.getElementById(sectionId).classList.add('active');
+}
+
+function checkAnswer(inputId, correctAnswer, nextSectionId) {
+    const userAnswer = document.getElementById(inputId).value.trim();
+    const feedback = document.getElementById('feedback' + inputId.charAt(inputId.length - 1));
+    if (userAnswer.toUpperCase() === correctAnswer.toUpperCase()) {
+        feedback.innerText = '¡Correcto!';
+        feedback.style.color = 'green';
+        setTimeout(() => nextSection(nextSectionId), 1000);
+    } else {
+        feedback.innerText = 'Incorrecto, intenta nuevamente.';
+        feedback.style.color = 'red';
+    }
+}
+
+function checkQuiz(inputIds, correctAnswers, nextSectionId) {
+    let allCorrect = true;
+    inputIds.forEach((id, index) => {
+        const userAnswer = document.getElementById(id).value.trim();
+        if (userAnswer.toUpperCase() !== correctAnswers[index].toUpperCase()) {
+            allCorrect = false;
+        }
+    });
+    const feedback = document.getElementById('feedback2');
+    if (allCorrect) {
+        feedback.innerText = '¡Correcto!';
+        feedback.style.color = 'green';
+        setTimeout(() => nextSection(nextSectionId), 1000);
+    } else {
+        feedback.innerText = 'Algunas respuestas son incorrectas, intenta nuevamente.';
+        feedback.style.color = 'red';
+    }
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+.feedback {
+    margin-top: 10px;
+    color: red;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
